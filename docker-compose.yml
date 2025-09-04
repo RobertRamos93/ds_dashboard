@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=dashboard_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - dashboard_db_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d dashboard_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  dashboard_db_data:
