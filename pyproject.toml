@@ -4,4 +4,13 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "geodatasets>=2024.8.0",
+    "geopandas>=1.1.1",
+    "geoviews>=1.14.1",
+    "hvplot>=0.12.1",
+    "panel>=1.7.5",
+    "psycopg2>=2.9.10",
+    "sqlalchemy>=2.0.43",
+    "watchfiles>=1.1.0",
+]
