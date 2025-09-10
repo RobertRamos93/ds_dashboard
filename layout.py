@@ -30,7 +30,8 @@ mexico_map_plot = create_mexico_map(df)
 
 mexico_map_plot_pane = pn.pane.HoloViews(
     mexico_map_plot,
-    sizing_mode="stretch_width" 
+    sizing_mode="stretch_both",
+    min_height=400 
 )
 
 
@@ -87,8 +88,9 @@ pn.state.add_periodic_callback(update_data, period=180_000)
 # --------------------
 tabs = pn.Tabs(
     ("DataFrame", main_df_widget),
-    # ("Mexico Map", mexico_map_plot_pane),
+    ("Mexico Map", mexico_map_plot_pane),
     ("Products", popular_products_row),
+    sizing_mode="stretch_both"
 )
 
 

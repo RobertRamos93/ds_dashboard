@@ -1,40 +1,39 @@
 import geopandas as gpd
 import hvplot.pandas
 import pandas as pd
+from geopandas import GeoSeries
 
-def create_mexico_map(df):
-    """Create world map with trade data"""
+# gdf = gpd.read_file("gpd/inegi_refcenesta_2010.shp", engine="fiona")
+# print(gdf.columns)
+# print(gdf.head())
 
-    # # World geometry
-    # world = gpd.read_file("gpd/ne_110m_admin_0_countries.shp")
+def create_mexico_map(df, shapefile_path="gpd/inegi_refcenesta_2010.shp"):
+    # Cargar shapefile de estado
+    gdf = gpd.read_file(shapefile_path, engine="fiona")
 
-    # name_corrections = {
-    #     "United States": "United States of America"
-    # }
+    # Normalizar nombres de estados para el merge
+    gdf['nom_ent'] = gdf['nom_ent'].str.upper()
+    df['estado'] = df['estado'].str.upper()
 
-    # df_agg = df.groupby(["Country", "Year"], as_index=False)["Trade Value"].sum()
+    # Agrupar importes por estado
+    importe_por_estado = df.groupby('estado')['importe'].sum().reset_index()
 
-    # # Replace names in CSV before merging
-    # df_agg["Country"] = df_agg["Country"].replace(name_corrections)
+    # Hacer merge con GeoDataFrame
+    merged = gdf.merge(importe_por_estado, left_on='nom_ent', right_on='estado', how='left')
 
-    # # Merge trade data with world map
-    # # FIXED: Changed right_on from "COUNTRY" to "Country" to match your DataFrame
-    # gdf = world.merge(df_agg, left_on="ADMIN", right_on="Country", how="left")
-    # gdf = gdf.dissolve(by="Country", aggfunc="first").reset_index()
+    # Limpiar NaNs y reparar geometrías si es necesario
+    merged['importe'] = pd.to_numeric(merged['importe'], errors='coerce').fillna(0)
+    merged = merged[merged.geometry.is_valid & ~merged.geometry.is_empty]
 
+    # Crear mapa interactivo
+    mapa = merged.hvplot.polygons(
+        'geometry',
+        color='importe',
+        geo=True,
+        hover_cols=['nom_ent', 'importe'],
+        cmap='viridis',
+        colorbar=True,
+        title="Importe por estado de México",
+    )
 
-
-    # # Interactive map
-    # return gdf.hvplot(
-    #     geo=True,
-    #     tiles="CartoLight",
-    #     c="Trade Value",     
-    #     cmap="Viridis",
-    #     hover_cols="Country",  
-    #     line_color="black",
-    #     responsive=True,
-    #     # colorbar=True,  
-    #     logz=True,
-    #     title="World Trade Value Map",
-    #     sizing_mode="stretch_both"
-    # )
+    return mapa
