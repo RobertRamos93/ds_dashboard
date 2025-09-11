@@ -15,3 +15,6 @@ def load_data():
         print(f"Database connection failed: {e}")
         return pd.DataFrame() 
 
+# engine = create_engine("postgresql://postgres:Stray@localhost:5432/dashboard_db", client_encoding="utf8")
+# df = pd.read_sql_query("SELECT * FROM visa", engine)
+# print(df.head(10))

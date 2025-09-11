@@ -10,8 +10,11 @@ dependencies = [
     "geopandas>=1.1.1",
     "geoviews>=1.14.1",
     "hvplot>=0.12.1",
+    "matplotlib>=3.10.6",
     "panel>=1.7.5",
+    "plotly>=6.3.0",
     "psycopg2>=2.9.10",
+    "shapely>=2.1.1",
     "sqlalchemy>=2.0.43",
     "watchfiles>=1.1.0",
 ]
