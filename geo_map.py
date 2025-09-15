@@ -48,4 +48,4 @@ def create_mexico_map(df, shapefile_path="gpd/inegi_refcenesta_2010.shp"):
         border_multiplier=15
     )
     
-    return main_map, merged
+    return main_map, importe_por_estado

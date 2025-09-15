@@ -3,6 +3,8 @@ import panel as pn
 from db_connect import load_data
 from charts import popular_products_income, precompute_products_data
 from geo_map import create_mexico_map
+import os
+import io
 
 # --------------------
 # Panel Extension
@@ -24,7 +26,7 @@ main_df_widget = pn.widgets.Tabulator(load_data(),
 # --------------------
 # Mexico geo map
 # --------------------
-mexico_map_plot = create_mexico_map(df)
+mexico_map_plot, _ = create_mexico_map(df)
 
 mexico_map_plot_pane = pn.pane.HoloViews(
     mexico_map_plot,
@@ -106,8 +108,8 @@ def update_data():
     popular_products_income_df_widget.value = precomputed_products[current_sucursal]["data"]
     popular_products_income_plot_pane.object = precomputed_products[current_sucursal]["plot"]
 
-    # Recalculate geo map
-    mexico_map_plot_pane_new = create_mexico_map(df)
+    # Recalculate geo map and unpack the new plot
+    mexico_map_plot_pane_new, _ = create_mexico_map(df)
     mexico_map_plot_pane.object = mexico_map_plot_pane_new
 
 # --------------------
@@ -139,12 +141,52 @@ user_input = pn.widgets.TextAreaInput(
     max_length=1000
 )
 
+# Create the main dashboard layout first
+dashboard_layout = pn.template.FastListTemplate(
+    title="Visa Group Dashboard",
+    sidebar=[
+        logo_visa,
+        pn.pane.Markdown("# Asistente VisAI"),
+        user_input,
+    ],
+    main=[tabs],
+    accent_base_color="#4CAF50",
+    header_background="#2E7D32",
+)
+
+# --------------------
+# Report button
+# --------------------
+# Define the callback function now that dashboard_layout exists
+def get_report_content():
+    """Generates the dashboard report as a file-like object in memory."""
+    report_string_io = io.StringIO()
+    
+    # Save the dashboard layout to the buffer
+    dashboard_layout.save(report_string_io, title="Visa Group Report")
+    
+    # Rewind the buffer to the beginning before returning
+    report_string_io.seek(0)
+    return report_string_io
+
+# Create the FileDownload widget with the defined callback
+download_button = pn.widgets.FileDownload(
+    callback=get_report_content,
+    filename="visa_group_report.html",
+    name="Download Report 📄",
+    button_type="primary"
+)
+
+# Add the button to the layout's sidebar
+dashboard_layout.sidebar.append(download_button)
+
 dashboard_layout = pn.template.FastListTemplate(
     title="Visa Group Dashboard",
     sidebar=[
              logo_visa,
              pn.pane.Markdown("# Asistente VisAI"),
              user_input,
+             download_button,
              ],
     main=[tabs],
     accent_base_color="#4CAF50",
