@@ -23,7 +23,8 @@ def create_sucursal_a(df):
     sizing_mode="stretch_both"  
 )
     
-    sucursal_a_products_plot = df_sucursal_a.hvplot(
+    df_sucursal_a_productos = df_sucursal_a.groupby("concepto")["importe"].sum().reset_index()
+    sucursal_a_products_plot = df_sucursal_a_productos.hvplot(
         kind="bar",
         x="concepto",
         y="importe",
