@@ -11,11 +11,14 @@ def create_sucursal_a(df):
     """DataFrame widget for Sucursal"""
 
     df_sucursal_a = df[df["sucursal"] == "A"]
+    df_clean = df_sucursal_a.reset_index(drop=True).drop(columns=["id"])
+
 
     df_perspective_sucursal_a = pn.pane.Perspective(
-    df_sucursal_a,
+    df_clean,
     title="Sucursal A",
     editable=True,
+    columns = [c for c in df_sucursal_a.columns if c not in ["index", "id"]],
     columns_config={"estado": {"string_color_mode": "series", "format": "italics"}},
     sizing_mode="stretch_both"  
 )

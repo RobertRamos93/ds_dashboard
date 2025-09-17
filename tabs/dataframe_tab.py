@@ -4,9 +4,9 @@ from db_connect import load_data
 pn.extension("perspective")
 
 df = load_data()
-
+df_clean = df.reset_index().drop(columns=["index", "id"])
 main_df = pn.pane.Perspective(
-    df,
+    df_clean,
     title="Base de datos VISA",
     editable=True,
     columns_config={"estado": {"string_color_mode": "series", "format": "italics"}},
@@ -18,3 +18,5 @@ main_df_tab = pn.Column(
     pn.layout.VSpacer(),
     sizing_mode="stretch_both"
 )
+
+print(df_clean.columns)

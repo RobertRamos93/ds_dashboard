@@ -63,7 +63,7 @@ def create_mexico_map(df, shapefile_path="gpd/inegi_refcenesta_2010.shp"):
         geo=True,
         line_color="black",
         line_width=1,
-        cmap='viridis',
+        cmap='Greens',
         alpha=1.0,
         colorbar=True,
         hover_cols=['nom_ent', 'importe_fmt', 'porcentaje']
@@ -84,7 +84,7 @@ geo_map_df, mapa_mexico_plot = create_mexico_map(df)
 
 
 geo_map_row = pn.Row(
-    (geo_map_df, {"flex": 1}),
-    (mapa_mexico_plot, {"flex": 2}),
+    (geo_map_df),
+    (mapa_mexico_plot),
     sizing_mode="stretch_both"
 )
