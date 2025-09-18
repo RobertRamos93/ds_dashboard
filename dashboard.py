@@ -4,7 +4,7 @@ import io
 from tabs.dataframe_tab import main_df_tab
 from tabs.sucursales_tab import sucursal_a_row
 from tabs.geo_map_tab import geo_map_row
-
+from llm import chat_ui
 
 
 # --------------------
@@ -72,14 +72,15 @@ dashboard_layout.sidebar.append(download_button)
 
 dashboard_layout = pn.template.FastListTemplate(
     title="Visa Group Dashboard",
+    logo="visa_group.jpg",
     sidebar=[
              gif_visa,
              pn.pane.Markdown("# Asistente VisAI"),
-             user_input,
+             chat_ui,
              download_button,
              ],
     main=[tabs],
-    accent_base_color="#4CAF50",
-    header_background="#2E7D32",
+    theme_toggle=True,
+    accent="#032876"
 )
 dashboard_layout.servable()
