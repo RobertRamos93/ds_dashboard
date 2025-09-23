@@ -10,7 +10,7 @@ main_df = pn.pane.Perspective(
     title="Base de datos VISA",
     editable=True,
     columns=[c for c in df_main_clean.columns if c not in ["index", "id"]],  # Add this line!
-    columns_config={"estado": {"string_color_mode": "series", "format": "italics"}},
+    # columns_config={"estado": {"string_color_mode": "series", "format": "italics"}},
     sizing_mode="stretch_both"
 )
 

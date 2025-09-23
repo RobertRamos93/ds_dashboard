@@ -18,35 +18,8 @@ tabs = pn.Tabs(
 
 
 # --------------------
-# Main template
+# Report Download Function
 # --------------------
-
-gif_visa = pn.pane.GIF("visa.gif")
-
-# TextAreaInput
-user_input = pn.widgets.TextAreaInput(
-    placeholder="Escribe aquí...",
-    height=100,
-    max_length=1000
-)
-
-# Create the main dashboard layout first
-dashboard_layout = pn.template.FastListTemplate(
-    title="Visa Group Dashboard",
-    sidebar=[
-        gif_visa,
-        user_input,
-    ],
-    main=[tabs],
-    accent_base_color="#4CAF50",
-    header_background="#2E7D32",
-)
-
-
-# --------------------
-# Report button
-# --------------------
-# Define the callback function now that dashboard_layout exists
 def get_report_content():
     """Generates the dashboard report as a file-like object in memory."""
     report_string_io = io.StringIO()
@@ -58,29 +31,45 @@ def get_report_content():
     report_string_io.seek(0)
     return report_string_io
 
-# Create the FileDownload widget with the defined callback
+
+# --------------------
+# Download Button
+# --------------------
 download_button = pn.widgets.FileDownload(
     callback=get_report_content,
     filename="visa_group_report.html",
-    label="Descargar Reporte Dashboard VISA",
+    label="Descargar Reporte",
     button_type="success",
     icon="download",
-    icon_size="20px"
+    icon_size="20px",
+    width=150
 )
 
-# Add the button to the layout's sidebar
-dashboard_layout.sidebar.append(download_button)
 
+# --------------------
+# Sidebar Components
+# --------------------
+gif_visa = pn.pane.GIF("visa.gif")
+
+# Line separator
+separator = pn.pane.HTML("<hr style='border: 1px solid #ddd; margin: 20px 0;'>")
+
+
+# --------------------
+# Main Dashboard Layout
+# --------------------
 dashboard_layout = pn.template.FastListTemplate(
     title="Visa Group Dashboard",
     logo="visa_group.jpg",
     sidebar=[
-             gif_visa,
-             chat_ui,
-             download_button,
-             ],
+        gif_visa,
+        separator,  # Line separator between GIF and chat
+        chat_ui,
+    ],
     main=[tabs],
+    header=[download_button],  # Download button in header
     theme_toggle=True,
     accent="#032876"
 )
+
 dashboard_layout.servable()
