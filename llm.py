@@ -4,8 +4,6 @@ from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
 
-pn.extension("chat")
-
 ollama_model = OpenAIChatModel(
     model_name="llama3.1",
     provider=OllamaProvider(base_url="http://localhost:11434/v1")
@@ -23,7 +21,7 @@ async def response_callback(input_message: str, instance: pn.chat.ChatInterface)
 
 chat_ui = pn.chat.ChatInterface(
     callback=response_callback,
-    header="Straysina",
+    header=pn.pane.Markdown("# Asistente VisAI"),
     user="Usuario",
     avatar="🧑‍💻",
     callback_user="VisAI 🤖",

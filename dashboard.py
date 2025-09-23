@@ -35,7 +35,6 @@ dashboard_layout = pn.template.FastListTemplate(
     title="Visa Group Dashboard",
     sidebar=[
         gif_visa,
-        pn.pane.Markdown("# Asistente VisAI"),
         user_input,
     ],
     main=[tabs],
@@ -63,8 +62,10 @@ def get_report_content():
 download_button = pn.widgets.FileDownload(
     callback=get_report_content,
     filename="visa_group_report.html",
-    name="Download Report 📄",
-    button_type="primary"
+    label="Descargar Reporte Dashboard VISA",
+    button_type="success",
+    icon="download",
+    icon_size="20px"
 )
 
 # Add the button to the layout's sidebar
@@ -75,7 +76,6 @@ dashboard_layout = pn.template.FastListTemplate(
     logo="visa_group.jpg",
     sidebar=[
              gif_visa,
-             pn.pane.Markdown("# Asistente VisAI"),
              chat_ui,
              download_button,
              ],
